@@ -1,0 +1,386 @@
+[
+  {
+    "id": "dan-01",
+    "author": "dan",
+    "message": "Is Maryland available for shipping?",
+    "expect": {
+      "handoff": true
+    }
+  },
+  {
+    "id": "dan-02",
+    "author": "dan",
+    "message": "Is the shipping measured in days or weeks?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "dan-03",
+    "author": "dan",
+    "message": "Can I return one item after I bought it?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "dan-04",
+    "author": "dan",
+    "message": "What if there is nothing wrong with the item and I just want to return it?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "dan-05",
+    "author": "dan",
+    "message": "Do you have XXL size in these shoes, or in any shoes?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies",
+        "lookup_catalog"
+      ]
+    }
+  },
+  {
+    "id": "dan-06",
+    "author": "dan",
+    "message": "Do you have XXL, XL or XS in shirts?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies",
+        "lookup_catalog"
+      ]
+    }
+  },
+  {
+    "id": "dan-07",
+    "author": "dan",
+    "message": "Can I pay with crypto?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "dan-08",
+    "author": "dan",
+    "message": "Can I pay with Visa?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "dan-09",
+    "author": "dan",
+    "message": "Do you do service on weekends?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "dan-10",
+    "author": "dan",
+    "message": "Do you take appointments on Sundays?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-01",
+    "author": "claude",
+    "message": "how long until my order shows up?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-02",
+    "author": "claude",
+    "message": "do I pay anything for delivery if I spend 50 dollars?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-03",
+    "author": "claude",
+    "message": "how fast is the express option and what does it cost?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-04",
+    "author": "claude",
+    "message": "where can I follow my package?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-05",
+    "author": "claude",
+    "message": "my money still hasn't come back to my card, how long does it take?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-06",
+    "author": "claude",
+    "message": "I ran in the shoes twice and they hurt, can I swap them?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-07",
+    "author": "claude",
+    "message": "how do I send something back?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-08",
+    "author": "claude",
+    "message": "is sending an item back free?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-09",
+    "author": "claude",
+    "message": "I'm between a 42 and a 43, which one should I order?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-10",
+    "author": "claude",
+    "message": "do the compression leggings run small?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-11",
+    "author": "claude",
+    "message": "what size system do your sneakers use?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-12",
+    "author": "claude",
+    "message": "can I split the payment into installments?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-13",
+    "author": "claude",
+    "message": "do you take Apple Pay?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-14",
+    "author": "claude",
+    "message": "should I send you my card number here?",
+    "expect": {
+      "handoff": false
+    }
+  },
+  {
+    "id": "c-15",
+    "author": "claude",
+    "message": "what time do you close on Saturday?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-16",
+    "author": "claude",
+    "message": "are you open on a public holiday?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-17",
+    "author": "claude",
+    "message": "how much is the running analysis?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-18",
+    "author": "claude",
+    "message": "can I cancel my fitting the day before?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-19",
+    "author": "claude",
+    "message": "what's the latest slot I can book on a weekday?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "c-20",
+    "author": "claude",
+    "message": "do you price match other stores?",
+    "expect": {
+      "handoff": true
+    }
+  },
+  {
+    "id": "a-01",
+    "author": "claude",
+    "message": "How much are the Pacer 3 in size 42, and do you have them?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "lookup_catalog"
+      ]
+    }
+  },
+  {
+    "id": "a-02",
+    "author": "claude",
+    "message": "Do you have the Trailhawk in 44?",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "lookup_catalog"
+      ]
+    }
+  },
+  {
+    "id": "a-03",
+    "author": "claude",
+    "message": "Book me a gait analysis on Saturday November 14 at 10:00, my name is Ana.",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "book_appointment"
+      ]
+    }
+  },
+  {
+    "id": "a-04",
+    "author": "claude",
+    "message": "Can I book a shoe fitting on Sunday November 15 at 11:00? My name is Leo.",
+    "expect": {
+      "handoff": false,
+      "toolsAnyOf": [
+        "book_appointment",
+        "search_policies"
+      ]
+    }
+  },
+  {
+    "id": "a-05",
+    "author": "claude",
+    "message": "My shoes fell apart after one run, this is ridiculous, I want my money back now.",
+    "expect": {
+      "handoff": true
+    }
+  },
+  {
+    "id": "a-06",
+    "author": "claude",
+    "message": "Can I talk to a real person please?",
+    "expect": {
+      "handoff": true
+    }
+  }
+]

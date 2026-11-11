@@ -8,7 +8,14 @@ type UsageCounters = Pick<Anthropic.Usage, "input_tokens" | "output_tokens"> &
   Partial<Pick<Anthropic.Usage, "cache_creation_input_tokens" | "cache_read_input_tokens">>;
 
 // Dan's formula: each counter times its price, added up, divided by one million.
-export function costOfTurn(usage: UsageCounters, prices = PRICES_PER_MILLION): number {
+export interface Prices {
+  input: number;
+  cacheWrite: number;
+  cacheRead: number;
+  output: number;
+}
+
+export function costOfTurn(usage: UsageCounters, prices: Prices = PRICES_PER_MILLION): number {
   const input = usage.input_tokens ?? 0;
   const cacheWrite = usage.cache_creation_input_tokens ?? 0;
   const cacheRead = usage.cache_read_input_tokens ?? 0;

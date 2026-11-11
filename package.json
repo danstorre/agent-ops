@@ -13,7 +13,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "rag": "tsx scripts/rag-play.ts",
     "chat": "tsx scripts/chat.ts",
-    "eval:retrieval": "tsx scripts/eval-retrieval.ts"
+    "eval:retrieval": "tsx scripts/eval-retrieval.ts",
+    "eval:behavior": "tsx scripts/eval-behavior.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",
@@ -21,6 +22,7 @@
     "@electric-sql/pglite-pgvector": "^0.0.17",
     "@huggingface/transformers": "^4.3.2",
     "@modelcontextprotocol/sdk": "^1.32.2",
+    "openai": "^7.55.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { ToolInputError, type ToolHandler } from "../tools/types.js";
 import { HANDOFF_TOOL_NAME, handoffInput } from "../tools/handoff.js";
-import { costOfTurn } from "./cost.js";
+import { costOfTurn, PRICES_PER_MILLION, type Prices } from "./cost.js";
 
 // The one function the loop needs from the Claude client. Injecting it lets tests use a
 // fake model with no network and no API key.
@@ -16,6 +16,7 @@ export interface RunAgentOptions {
   model?: string;
   maxTurns?: number;
   onTurn?: (log: TurnLog) => void;
+  prices?: Prices;
 }
 
 // One line per model call: what Claude did, the four token counters and what it cost.
@@ -43,7 +44,7 @@ export interface AgentResult {
 export const HANDOFF_REPLY = "Let me connect you with a person from our team, they'll reply here shortly.";
 
 export async function runAgent(options: RunAgentOptions): Promise<AgentResult> {
-  const { createMessage, system, tools, userMessage, history = [], model = "claude-opus-5-5", maxTurns = 6, onTurn } = options;
+  const { createMessage, system, tools, userMessage, history = [], model = "claude-opus-5-5", maxTurns = 6, onTurn, prices = PRICES_PER_MILLION } = options;
   const log: TurnLog[] = [];
   const done = (r: Omit<AgentResult, "log" | "costUsd">): AgentResult => ({
     ...r,
@@ -74,7 +75,7 @@ export async function runAgent(options: RunAgentOptions): Promise<AgentResult> {
       cache_creation_input_tokens: response.usage.cache_creation_input_tokens ?? 0,
       cache_read_input_tokens: response.usage.cache_read_input_tokens ?? 0,
       output_tokens: response.usage.output_tokens ?? 0,
-      cost_usd: costOfTurn(response.usage),
+      cost_usd: costOfTurn(response.usage, prices),
     };
     log.push(entry);
     onTurn?.(entry);
