@@ -95,32 +95,32 @@ writeFileSync(
   ].join("\n"),
 );
 const transcript = (messages: Saved["messages"]) => {
-  if (!messages) return `<p class="meta">Transcript not recorded for this run.</p>`;
+  if (!messages) return "";
   const steps: string[] = [];
   for (const m of messages as Array<{ role: string; content: string | Array<Record<string, unknown>> }>) {
-    if (typeof m.content === "string") { steps.push(`<div class="step"><div class="who">${m.role === "user" ? "CUSTOMER" : "AGENT"}</div>${esc(m.content)}</div>`); continue; }
+    if (typeof m.content === "string") { steps.push(`<p><b>${m.role === "user" ? "Customer" : "Agent"}:</b> ${esc(m.content)}</p>`); continue; }
     for (const b of m.content) {
-      if (b.type === "text" && b.text) steps.push(`<div class="step"><div class="who">AGENT</div>${esc(b.text as string)}</div>`);
-      if (b.type === "tool_use") steps.push(`<div class="step"><div class="who">MODEL CALLS ${esc(b.name as string)}</div><pre>${esc(JSON.stringify(b.input, null, 2))}</pre></div>`);
-      if (b.type === "tool_result") steps.push(`<div class="step"><div class="who">TOOL RETURNS${b.is_error ? " (ERROR)" : ""}</div><pre>${esc(String(b.content))}</pre></div>`);
+      if (b.type === "text" && b.text) steps.push(`<p><b>Agent:</b> ${esc(b.text as string)}</p>`);
+      if (b.type === "tool_use") steps.push(`<p><b>Model asks for ${esc(b.name as string)}:</b></p><pre>${esc(JSON.stringify(b.input))}</pre>`);
+      if (b.type === "tool_result") steps.push(`<p><b>Tool answers${b.is_error ? " (error)" : ""}:</b></p><pre>${esc(String(b.content))}</pre>`);
     }
   }
   return steps.join("");
 };
-const htmlCards = rows.map((r) => {
-  const badges = r.checks.filter((k) => k.applies).map((k) => `<span class="badge ${k.passed ? "ok" : "bad"}" title="${esc(k.detail)}">${k.passed ? "✓" : "✗"} ${k.name}</span>`).join("");
-  const failed = r.checks.filter((k) => k.applies && !k.passed);
-  return `<div class="card"><div class="q">${esc(r.c.message)}</div>
-<div class="meta">${esc(r.c.id)} · expected: ${r.c.expect.handoff ? "hand off to a person" : `answer${r.c.expect.toolsAnyOf ? ` using ${r.c.expect.toolsAnyOf.join(" or ")}` : ""}`} · tools called: ${esc(r.tools.join(", ") || "none")}</div>
-<div style="margin-top:6px">${badges}</div>
-${failed.length ? `<p class="meta">${failed.map((k) => `${esc(k.name)}: ${esc(k.detail)}`).join(" · ")}</p>` : ""}
-<p><b>Reply:</b> ${esc(r.s.reply)}</p>
-<details><summary>Transcript step by step</summary>${transcript(r.s.messages)}</details></div>`;
+const plain: Record<string, string> = {
+  "right tool": "didn't use the right tool",
+  "correct handoff": "should have handed off to a person",
+  "citation present": "didn't cite the policy",
+  "no invented prices": "said a price that doesn't exist",
+};
+const ok = (r: (typeof rows)[number]) => r.checks.every((k) => !k.applies || k.passed);
+const htmlRows = [...rows].sort((x, y) => Number(ok(x)) - Number(ok(y))).map((r) => {
+  const failed = r.checks.filter((k) => k.applies && !k.passed).map((k) => plain[k.name]).join(", ");
+  return `<div class="row"><details><summary>${ok(r) ? "✅" : "❌"} ${esc(r.c.message)} ${failed ? `<span class="why">— ${failed}</span>` : ""}</summary>
+<div><b>Reply:</b> ${esc(r.s.reply)}${r.s.messages ? `<details><summary>Step by step</summary>${transcript(r.s.messages)}</details>` : ""}</div></details></div>`;
 }).join("\n");
-const stat = (label: string, n: number, d: number) => `<div class="stat"><b>${n}/${d}</b><span>${esc(label)}</span></div>`;
-writeFileSync(new URL(`../evals/reports/behavior-${MODEL}.html`, import.meta.url), page(`Behavior eval: ${MODEL}`, `<h1>Behavior eval: ${esc(MODEL)}</h1>
-<p class="lead">${rows.length} of ${allCases.length} conversations, one run each. Each conversation is checked for the right tool, a correct handoff, citations and invented prices. Estimated cost USD ${cost.toFixed(4)}.</p>
-<div class="stats">${summary.map((x) => stat(x.name, x.passed, x.total)).join("")}${stat("all checks in a conversation", allPassed, rows.length)}</div>
-<h2>Per conversation</h2>${htmlCards}`));
+writeFileSync(new URL(`../evals/reports/behavior-${MODEL}.html`, import.meta.url), page(`Agent eval: ${MODEL}`, `<h1>Agent eval</h1>
+<p class="big">Passed every check: <b>${allPassed} of ${rows.length}</b> conversations.</p>
+${htmlRows}`));
 
 console.log(`${rows.length}/${cases.length} conversations${stoppedBy ? `, stopped by ${stoppedBy}` : ""}\n${summary.map((x) => `${x.name}: ${pct(x.passed, x.total)}`).join("\n")}\nall checks: ${pct(allPassed, rows.length)}\ncost: USD ${cost.toFixed(3)}`);

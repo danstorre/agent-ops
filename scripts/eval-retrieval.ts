@@ -49,24 +49,17 @@ const report = [
 writeFileSync(new URL("../docs/evals/retrieval.md", import.meta.url), report);
 
 const heading = new Map(loadPolicyChunks().map((c) => [`${c.doc}#${c.index}`, `${c.doc} · ${c.heading}`]));
-const badge = (row: RetrievalRow) =>
-  row.expected.length === 0 ? `<span class="badge na">no answer in the policies</span>`
-  : row.rank === 1 ? `<span class="badge ok">right section first</span>`
-  : row.rank ? `<span class="badge warn">right section #${row.rank}</span>`
-  : `<span class="badge bad">missed</span>`;
-const htmlCards = model.rows.map((row, i) => {
-  const base = baseline.rows[i]!;
-  const items = row.got.map((tag, k) => `<li class="${row.expected.includes(tag) ? "hit" : ""}">${esc(heading.get(tag) ?? tag)} <span class="meta">[${esc(tag)}] · distance ${row.gotDistances[k]!.toFixed(2)}</span></li>`).join("");
-  return `<div class="card"><div class="q">${esc(row.question)}</div>
-<div class="meta">${esc(row.id)} · correct: ${row.expected.length ? row.expected.map((t) => esc(heading.get(t) ?? t)).join(" or ") : "none"}</div>
-<div style="margin-top:6px">${badge(row)} <span class="meta">keyword baseline: ${base.expected.length === 0 ? "n/a" : base.rank ? `#${base.rank}` : "missed"}</span></div>
-<ol>${items}</ol></div>`;
+const icon = (row: RetrievalRow) => (row.expected.length === 0 ? "⚪" : row.rank === 1 ? "✅" : row.rank ? "🟡" : "❌");
+const why = (row: RetrievalRow) =>
+  row.expected.length === 0 ? "the policies don't answer this" : row.rank === 1 ? "" : row.rank ? `right section came #${row.rank}` : "right section not found";
+const order = (row: RetrievalRow) => (row.expected.length === 0 ? 2 : row.rank === 1 ? 1 : 0);
+const htmlRows = [...model.rows].sort((x, y) => order(x) - order(y)).map((row) => {
+  const found = row.got.map((tag, k) => `${k + 1}. ${esc(heading.get(tag) ?? tag)}${row.expected.includes(tag) ? " ← correct" : ""}`).join("<br>");
+  return `<div class="row"><details><summary>${icon(row)} ${esc(row.question)} ${why(row) ? `<span class="why">— ${why(row)}</span>` : ""}</summary><div>${found}</div></details></div>`;
 }).join("\n");
-const stat = (label: string, n: number, d: number) => `<div class="stat"><b>${n}/${d}</b><span>${label} · ${Math.round((100 * n) / d)}%</span></div>`;
-writeFileSync(new URL("../evals/reports/retrieval.html", import.meta.url), page("Retrieval eval", `<h1>Retrieval eval</h1>
-<p class="lead">${cases.length} customer questions. For each one, the 3 policy sections the search returned, in order; the correct one in bold.</p>
-<div class="stats">${stat("Model: right section first", model.summary.hitAt1, model.summary.answerable)}${stat("Model: right section in top 3", model.summary.hitAt3, model.summary.answerable)}${stat("Keyword baseline: first", baseline.summary.hitAt1, baseline.summary.answerable)}${stat("Keyword baseline: top 3", baseline.summary.hitAt3, baseline.summary.answerable)}</div>
-<h2>Per question</h2>${htmlCards}`));
+writeFileSync(new URL("../evals/reports/retrieval.html", import.meta.url), page("Search eval", `<h1>Search eval</h1>
+<p class="big">Right section first: <b>${model.summary.hitAt1} of ${model.summary.answerable}</b>. Word-only search: ${baseline.summary.hitAt1} of ${baseline.summary.answerable}.</p>
+${htmlRows}`));
 
 console.log(`model    hit@1 ${pct(model.summary.hitAt1, model.summary.answerable)}  hit@3 ${pct(model.summary.hitAt3, model.summary.answerable)}`);
 console.log(`baseline hit@1 ${pct(baseline.summary.hitAt1, baseline.summary.answerable)}  hit@3 ${pct(baseline.summary.hitAt3, baseline.summary.answerable)}`);
