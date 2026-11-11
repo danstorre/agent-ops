@@ -44,14 +44,17 @@ Two labels were widened after review, because both "Return window" and "How to r
 
 The whole agent on real conversations, scored by four automatic checks: right tool, correct handoff, citation present, no invented prices. Run on 14 of the 36 conversations with gpt-4.1-mini through the OpenAI adapter (the account used allows 50 requests a day per model). Report: [docs/evals/behavior-gpt-4.1-mini.md](docs/evals/behavior-gpt-4.1-mini.md).
 
-| Check | Passed |
-|---|---|
-| Right tool | 11/11 |
-| Correct handoff | 13/14 |
-| Citation present | 8/8 |
-| No invented prices | 12/12 |
+The first run passed 13 of 14. The failure: asked "Is Maryland available for shipping?", the agent answered "Yes, we do ship to Maryland", though the policies never list destinations (gpt-4o did the same). The transcript showed retrieval was fine and the model filled the gap, so the fix went into the instructions, as a general rule rather than a Maryland special case:
 
-The failure is the interesting part: asked "Is Maryland available for shipping?", the agent answered "Yes, we do ship to Maryland", though the policies never list destinations. gpt-4o did the same in an earlier run.
+> State only what the passages say. If they list the options and the customer asks about one that isn't listed, say it isn't offered. If the passages don't cover the topic at all, don't assume an answer: say you'll check with the team and hand off.
+
+| Case | Before the fix | After |
+|---|---|---|
+| Is Maryland available for shipping? | "Yes, we do ship to Maryland" ✗ | Hands off: "policies don't specify destinations" ✓ |
+| Can I pay with crypto? (control) | "We don't accept crypto" ✓ | Same ✓ |
+| Do you take appointments on Sundays? (control) | Closed on Sundays ✓ | Same ✓ |
+
+The other 11 conversations in the report still come from the first prompt; re-running all of them on the new prompt is next.
 
 ## Run it
 
