@@ -1,0 +1,14 @@
+[
+  {"sku": "RUN-001", "name": "Pacer 3 road running shoe", "category": "shoes", "price_usd": 120, "sizes": [38, 39, 40, 41, 42, 43, 44], "colors": ["red", "black"], "stock": {"42": 4, "43": 0}},
+  {"sku": "RUN-002", "name": "Trailhawk trail running shoe", "category": "shoes", "price_usd": 145, "sizes": [39, 40, 41, 42, 43, 44, 45], "colors": ["green", "grey"], "stock": {"42": 2, "44": 1}},
+  {"sku": "RUN-003", "name": "Cloudstep cushioned trainer", "category": "shoes", "price_usd": 135, "sizes": [36, 37, 38, 39, 40, 41, 42], "colors": ["white", "blue"], "stock": {"38": 3, "40": 5}},
+  {"sku": "RUN-004", "name": "Sprint Lite racing flat", "category": "shoes", "price_usd": 160, "sizes": [40, 41, 42, 43], "colors": ["orange"], "stock": {"41": 1}},
+  {"sku": "APP-001", "name": "Breeze running t-shirt", "category": "apparel", "price_usd": 35, "sizes": ["S", "M", "L", "XL"], "colors": ["black", "white", "red"], "stock": {"M": 10, "L": 6}},
+  {"sku": "APP-002", "name": "Windshell running jacket", "category": "apparel", "price_usd": 89, "sizes": ["S", "M", "L"], "colors": ["navy"], "stock": {"M": 2}},
+  {"sku": "APP-003", "name": "Compression running tights", "category": "apparel", "price_usd": 55, "sizes": ["XS", "S", "M", "L"], "colors": ["black"], "stock": {"S": 4, "M": 3}},
+  {"sku": "ACC-001", "name": "Merino running socks (3 pack)", "category": "accessories", "price_usd": 24, "sizes": ["S", "M", "L"], "colors": ["mixed"], "stock": {"M": 20}},
+  {"sku": "ACC-002", "name": "Hydration vest 5L", "category": "accessories", "price_usd": 75, "sizes": ["S/M", "L/XL"], "colors": ["black"], "stock": {"S/M": 3}},
+  {"sku": "ACC-003", "name": "GPS running watch Lite", "category": "accessories", "price_usd": 199, "sizes": ["one size"], "colors": ["black"], "stock": {"one size": 2}},
+  {"sku": "SRV-001", "name": "Gait analysis session (30 min)", "category": "services", "price_usd": 40, "sizes": [], "colors": [], "stock": {}},
+  {"sku": "SRV-002", "name": "Shoe fitting appointment (20 min)", "category": "services", "price_usd": 0, "sizes": [], "colors": [], "stock": {}}
+]
