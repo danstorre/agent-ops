@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "northside-store": {
+      "command": "npx",
+      "args": ["tsx", "src/mcp/main.ts"]
+    }
+  }
+}

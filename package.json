@@ -15,7 +15,8 @@
     "chat": "tsx scripts/chat.ts",
     "eval:retrieval": "tsx scripts/eval-retrieval.ts",
     "eval:behavior": "tsx scripts/eval-behavior.ts",
-    "transcript": "tsx scripts/transcript.ts"
+    "transcript": "tsx scripts/transcript.ts",
+    "mcp": "tsx src/mcp/main.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

@@ -30,3 +30,8 @@ Each entry: the decision, why, and the alternative I rejected.
 ## Cost per model call
 - **Decision:** `costOfTurn` prices each call from its four token counters (USD per million on Claude Opus 5.5: input 4, cache write 5, cache read 0.20, output 20). The loop logs one line per call and returns the total.
 - **Why:** one customer message can be several calls with tools, so cost per conversation is the number the business cares about. The log is also the cache monitor. Output is the most expensive token and can't be cached, so the prompt asks for two-or-three-sentence replies.
+
+## The same tools over MCP
+- **Decision:** an MCP server (`src/mcp`) registers the store's tools with the same handlers, descriptions and zod schemas the agent loop uses; a project `.mcp.json` lets Claude Code start it over stdio. `handoff_to_human` is not exposed, since there is no store team behind an MCP client.
+- **Why:** tools written once work in any MCP client (Claude Code, Codex, Gemini CLI). Business-rule rejections come back as `isError` results, as in the loop. Stdout carries the protocol, so library logs are sent to stderr.
+- **Rejected:** a separate HTTP API per client.

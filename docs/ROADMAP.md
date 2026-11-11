@@ -8,5 +8,5 @@
 - [x] Fix what the behavior eval found (hallucinated shipping destination) and re-run the failing case and two controls
 - [ ] Re-run all behavior conversations on the fixed prompt
 - [ ] Run all 36 conversations as the daily rate limit allows
-- [ ] MCP server exposing the same tools, used from Claude Code
+- [x] MCP server exposing the same tools, used from Claude Code
 - [ ] Dockerfile and a short demo recording

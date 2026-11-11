@@ -6,7 +6,7 @@ A WhatsApp-style sales and support agent for a small running store, built in pub
 
 Today the agent can look up the catalog, book appointments and hand the customer off to a person. The store's policies live in a database: when a customer asks about shipping, returns or payments, Claude calls a search tool that finds the policy passages closest in meaning to the question, and Claude answers from those passages and cites them. It hands off to a person when the customer asks for a human, is upset, wants an exception the policies don't allow, or asks something the catalog, the policies and the bookings can't answer.
 
-How I know it works: 40 automated tests run against a fake Claude with scripted replies, so they need no API key. They cover tool calls and their ids, bad tool inputs, the turn limit, handoffs, the booking rules, a prompt that stays identical between calls so it can be cached, the cost of every turn, and one test with the real embedding model that proves search by meaning: "how much does delivery cost?" finds the shipping costs section, though the question never says "shipping".
+How I know it works: 44 automated tests run against a fake Claude with scripted replies, so they need no API key. They cover tool calls and their ids, bad tool inputs, the turn limit, handoffs, the booking rules, a prompt that stays identical between calls so it can be cached, the cost of every turn, and one test with the real embedding model that proves search by meaning: "how much does delivery cost?" finds the shipping costs section, though the question never says "shipping".
 
 ## How it works
 
@@ -28,6 +28,10 @@ flowchart TD
 - **Retrieval** (`src/rag`): each policy section is one chunk, embedded locally with all-MiniLM-L6-v2 (384 dimensions, no key) and stored in pgvector, running in-process with PGlite. Search is `ORDER BY embedding <=> $1 LIMIT $2`. Claude reads the text of the nearest passages, never the vectors.
 - **Cost** (`src/agent/cost.ts`): every model call is logged with its four token counters and its cost. Tools and instructions are cached, so after the first call they're read at a twentieth of the input price.
 - **Model**: `claude-opus-5-5`, with server-side refusal fallbacks. If the whole chain refuses, the customer goes to a person.
+
+## Use the store's tools from Claude Code (MCP)
+
+The same three store tools (`lookup_catalog`, `search_policies`, `book_appointment`) are also served over MCP, so any MCP client can use them: same handlers, descriptions and zod schemas as inside the agent loop. The repo ships a project `.mcp.json`, so opening Claude Code here offers to connect the `northside-store` server; no API key needed. Then ask it, for example, "How much are the Pacer 3, and can I return them if I already ran in them?" and it calls the catalog and the policies itself.
 
 ## Evals
 
@@ -60,13 +64,14 @@ The other 11 conversations in the report still come from the first prompt; re-ru
 
 ```bash
 npm install
-npm test                                              # 40 tests, no API key needed
+npm test                                              # 44 tests, no API key needed
 npm run eval:retrieval                                # retrieval eval, writes docs/evals/retrieval.md
 npx tsx --env-file=.env scripts/eval-behavior.ts gpt-4.1-mini   # behavior eval, needs OPENAI_API_KEY
 npm run transcript -- dan-01                          # read one eval conversation step by step
 open evals/reports/*.html                             # both evals as readable pages, with transcripts
 npm run rag -- "can I return shoes I already ran in?" # see retrieval step by step
 npm run chat                                          # live chat, needs your own ANTHROPIC_API_KEY
+npm run mcp                                           # the store's tools as an MCP server over stdio
 ```
 
 ## Status
