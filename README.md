@@ -6,7 +6,7 @@ A WhatsApp-style sales and support agent for a small running store, built in pub
 
 Today the agent can look up the catalog, book appointments and hand the customer off to a person. The store's policies live in a database: when a customer asks about shipping, returns or payments, Claude calls a search tool that finds the policy passages closest in meaning to the question, and Claude answers from those passages and cites them. It hands off to a person when the customer asks for a human, is upset, wants an exception the policies don't allow, or asks something the catalog, the policies and the bookings can't answer.
 
-How I know it works: 28 automated tests run against a fake Claude with scripted replies, so they need no API key. They cover tool calls and their ids, bad tool inputs, the turn limit, handoffs, the booking rules, a prompt that stays identical between calls so it can be cached, the cost of every turn, and one test with the real embedding model that proves search by meaning: "how much does delivery cost?" finds the shipping costs section, though the question never says "shipping".
+How I know it works: 30 automated tests run against a fake Claude with scripted replies, so they need no API key. They cover tool calls and their ids, bad tool inputs, the turn limit, handoffs, the booking rules, a prompt that stays identical between calls so it can be cached, the cost of every turn, and one test with the real embedding model that proves search by meaning: "how much does delivery cost?" finds the shipping costs section, though the question never says "shipping".
 
 ## How it works
 
@@ -29,11 +29,23 @@ flowchart TD
 - **Cost** (`src/agent/cost.ts`): every model call is logged with its four token counters and its cost. Tools and instructions are cached, so after the first call they're read at a twentieth of the input price.
 - **Model**: `claude-opus-5-5`, with server-side refusal fallbacks. If the whole chain refuses, the customer goes to a person.
 
+## Evals
+
+Retrieval eval over 30 customer questions, 10 of them written by me in the words a customer would use ("Is the shipping measured in days or weeks?", "Can I pay with crypto?"). Full table in [docs/evals/retrieval.md](docs/evals/retrieval.md); CI fails if hit@3 drops.
+
+| Retriever | Right section first | Right section in the 3 Claude reads |
+|---|---|---|
+| Local embeddings | 24/28 (86%) | 28/28 (100%) |
+| Keyword baseline | 6/28 (21%) | 16/28 (57%) |
+
+Two questions the policies can't answer ("Is Maryland available for shipping?") aren't scored here: the right behavior is a handoff, which the behavior eval will check.
+
 ## Run it
 
 ```bash
 npm install
-npm test                                              # 28 tests, no API key needed
+npm test                                              # 30 tests, no API key needed
+npm run eval:retrieval                                # retrieval eval, writes docs/evals/retrieval.md
 npm run rag -- "can I return shoes I already ran in?" # see retrieval step by step
 npm run chat                                          # live chat, needs your own ANTHROPIC_API_KEY
 ```

@@ -10,3 +10,6 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - run: npm run eval:retrieval
+        env:
+          GATE_HIT_AT_3: 28

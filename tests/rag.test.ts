@@ -1,10 +1,10 @@
 import { describe, it, expect, afterAll } from "vitest";
 import { buildPolicyStore, searchPoliciesTool } from "../src/tools/policies.js";
 import { localEmbedder } from "../src/rag/embed.js";
-import { fakeEmbedder } from "./fake-embedder.js";
+import { keywordEmbedder } from "../src/rag/keyword-embedder.js";
 
-describe("policy search with the fake embedder (word overlap)", async () => {
-  const store = await buildPolicyStore(fakeEmbedder);
+describe("policy search with the keyword baseline (word overlap)", async () => {
+  const store = await buildPolicyStore(keywordEmbedder);
   afterAll(() => store.close());
 
   it("returns the nearest chunks first, closest distance first", async () => {
