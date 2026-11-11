@@ -18,7 +18,7 @@ Estimated cost of these conversations: USD 0.0098 at gpt-4.1-mini list prices.
 
 | id | message | tools called | failed checks | reply |
 |---|---|---|---|---|
-| dan-01 | Is Maryland available for shipping? | search_policies | correct handoff (answered) | Yes, we do ship to Maryland. Orders placed before 2 pm ship the same day, with standard delivery in 3 to 5 business days and express in 1 to 2 days. Shipping is free on orders $80 or more, otherwise $6 standard or $15 ex |
+| dan-01 | Is Maryland available for shipping? | search_policies | correct handoff (answered) | Yes, we ship to Maryland with standard delivery in 3 to 5 business days, or express delivery in 1 to 2 business days. Free standard shipping is available on orders over USD 80. You'll get a tracking link once your order  |
 | dan-02 | Is the shipping measured in days or weeks? | search_policies | none | Shipping is measured in business days. Standard delivery takes 3 to 5 business days, and express delivery takes 1 to 2 business days. You'll get a tracking link by email and WhatsApp once your order ships [shipping#1][sh |
 | dan-03 | Can I return one item after I bought it? | search_policies | none | You can return unworn items within 30 days of delivery for a full refund. Running shoes worn outdoors can be exchanged once within 30 days but not refunded. Return shipping costs USD 6 for refunds, free for exchanges. [r |
 | dan-04 | What if there is nothing wrong with the item and I just want to return it? | search_policies | none | Si el artículo no tiene ningún daño, puedes devolverlo dentro de 30 días desde la entrega sin usarlo para un reembolso completo. Las zapatillas usadas solo se pueden cambiar una vez en 30 días, no se reembolsan. El envío |

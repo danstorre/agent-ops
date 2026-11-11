@@ -20,7 +20,7 @@ const runsDir = new URL("../evals/runs/", import.meta.url);
 const runFile = new URL(`behavior-${MODEL}.jsonl`, runsDir);
 mkdirSync(runsDir, { recursive: true });
 
-type Saved = { id: string; reply: string; handedOff: boolean; handoffReason?: string; log: AgentResult["log"]; costUsd: number };
+type Saved = { id: string; reply: string; handedOff: boolean; handoffReason?: string; log: AgentResult["log"]; costUsd: number; messages?: AgentResult["messages"] };
 const saved = new Map<string, Saved>(
   existsSync(runFile) ? readFileSync(runFile, "utf8").trim().split("\n").filter(Boolean).map((l) => [JSON.parse(l).id, JSON.parse(l)]) : [],
 );
@@ -33,7 +33,7 @@ if (todo.length) {
   for (const c of todo) {
     try {
       const r = await runAgent({ createMessage, system: SYSTEM_PROMPT, tools: storeTools(policies), userMessage: c.message, model: MODEL, prices: PRICES });
-      const row: Saved = { id: c.id, reply: r.reply, handedOff: r.handedOff, handoffReason: r.handoffReason, log: r.log, costUsd: r.costUsd };
+      const row: Saved = { id: c.id, reply: r.reply, handedOff: r.handedOff, handoffReason: r.handoffReason, log: r.log, costUsd: r.costUsd, messages: r.messages };
       appendFileSync(runFile, JSON.stringify(row) + "\n");
       saved.set(c.id, row);
       console.log(`done ${c.id}`);

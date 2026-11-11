@@ -14,7 +14,8 @@
     "rag": "tsx scripts/rag-play.ts",
     "chat": "tsx scripts/chat.ts",
     "eval:retrieval": "tsx scripts/eval-retrieval.ts",
-    "eval:behavior": "tsx scripts/eval-behavior.ts"
+    "eval:behavior": "tsx scripts/eval-behavior.ts",
+    "transcript": "tsx scripts/transcript.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",
