@@ -4,9 +4,15 @@ import type { CreateMessage } from "./loop.js";
 
 type ChatCreate = (body: OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming) => Promise<OpenAI.Chat.Completions.ChatCompletion>;
 
-// gpt-4o list prices in USD per million tokens (check current pricing before relying on them).
-// OpenAI caches long prompts automatically: cached input is billed at half price, no write fee.
-export const GPT_4O_PRICES = { input: 2.5, cacheWrite: 2.5, cacheRead: 1.25, output: 10 } as const;
+// List prices in USD per million tokens, for cost estimates only (check current pricing).
+// OpenAI caches long prompts automatically: cached input is billed at a discount, with no write fee.
+export const OPENAI_PRICES: Record<string, { input: number; cacheWrite: number; cacheRead: number; output: number }> = {
+  "gpt-4o": { input: 2.5, cacheWrite: 2.5, cacheRead: 1.25, output: 10 },
+  "gpt-4o-mini": { input: 0.15, cacheWrite: 0.15, cacheRead: 0.075, output: 0.6 },
+  "gpt-4.1": { input: 2, cacheWrite: 2, cacheRead: 0.5, output: 8 },
+  "gpt-4.1-mini": { input: 0.4, cacheWrite: 0.4, cacheRead: 0.1, output: 1.6 },
+};
+export const GPT_4O_PRICES = OPENAI_PRICES["gpt-4o"]!;
 
 // The same CreateMessage interface the loop uses for Claude, backed by OpenAI Chat Completions.
 // It translates the request out and the response back, so the loop, the tools, retrieval and the
