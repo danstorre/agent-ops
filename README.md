@@ -35,10 +35,10 @@ Retrieval eval over 30 customer questions, 10 of them written by me in the words
 
 | Retriever | Right section first | Right section in the 3 Claude reads |
 |---|---|---|
-| Local embeddings | 24/28 (86%) | 28/28 (100%) |
+| Local embeddings | 26/28 (93%) | 28/28 (100%) |
 | Keyword baseline | 6/28 (21%) | 16/28 (57%) |
 
-Two questions the policies can't answer ("Is Maryland available for shipping?") aren't scored here: the right behavior is a handoff, which the behavior eval will check.
+Two labels were widened after review, because both "Return window" and "How to return" answer "Can I return one item?"; the note is in the cases file. Two questions the policies can't answer ("Is Maryland available for shipping?") aren't scored here: the right behavior is a handoff, which the behavior eval will check.
 
 ## Run it
 

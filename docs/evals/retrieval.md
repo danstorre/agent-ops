@@ -4,8 +4,8 @@
 
 | Retriever | Right section first (hit@1) | Right section in the 3 Claude reads (hit@3) |
 |---|---|---|
-| local embeddings (all-MiniLM-L6-v2) | 24/28 (86%) | 28/28 (100%) |
-| keyword baseline (word overlap) | 6/28 (21%) | 16/28 (57%) |
+| local embeddings (all-MiniLM-L6-v2) | 26/28 (93%) | 28/28 (100%) |
+| keyword baseline (word overlap) | 8/28 (29%) | 17/28 (61%) |
 
 Questions the policies can't answer (2) are not counted: the right behavior there is a handoff, which the behavior eval checks.
 
@@ -15,8 +15,8 @@ Questions the policies can't answer (2) are not counted: the right behavior ther
 |---|---|---|---|---|---|
 | dan-01 | Is Maryland available for shipping? | none | n/a | n/a | shipping#2, shipping#0, returns#1 |
 | dan-02 | Is the shipping measured in days or weeks? | shipping#1 | #1 | #3 | shipping#1, shipping#3, store-and-appointments#1 |
-| dan-03 | Can I return one item after I bought it? | returns#0 | #2 | #3 | returns#1, returns#0, returns#2 |
-| dan-04 | What if there is nothing wrong with the item and I just want to return it? | returns#0 | #2 | miss | returns#1, returns#0, returns#2 |
+| dan-03 | Can I return one item after I bought it? | returns#0, returns#1 | #1 | #1 | returns#1, returns#0, returns#2 |
+| dan-04 | What if there is nothing wrong with the item and I just want to return it? | returns#0, returns#1 | #1 | #1 | returns#1, returns#0, returns#2 |
 | dan-05 | Do you have XXL size in these shoes, or in any shoes? | sizing#0 | #1 | #1 | sizing#0, sizing#1, store-and-appointments#1 |
 | dan-06 | Do you have XXL, XL or XS in shirts? | sizing#1 | #1 | #2 | sizing#1, sizing#0, shipping#3 |
 | dan-07 | Can I pay with crypto? | payments#0 | #1 | miss | payments#0, returns#1, shipping#2 |

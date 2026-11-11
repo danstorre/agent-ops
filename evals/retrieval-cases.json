@@ -1,33 +1,245 @@
 [
-  { "id": "dan-01", "author": "dan", "question": "Is Maryland available for shipping?", "expected": [] },
-  { "id": "dan-02", "author": "dan", "question": "Is the shipping measured in days or weeks?", "expected": ["shipping#1"] },
-  { "id": "dan-03", "author": "dan", "question": "Can I return one item after I bought it?", "expected": ["returns#0"] },
-  { "id": "dan-04", "author": "dan", "question": "What if there is nothing wrong with the item and I just want to return it?", "expected": ["returns#0"] },
-  { "id": "dan-05", "author": "dan", "question": "Do you have XXL size in these shoes, or in any shoes?", "expected": ["sizing#0"] },
-  { "id": "dan-06", "author": "dan", "question": "Do you have XXL, XL or XS in shirts?", "expected": ["sizing#1"] },
-  { "id": "dan-07", "author": "dan", "question": "Can I pay with crypto?", "expected": ["payments#0"] },
-  { "id": "dan-08", "author": "dan", "question": "Can I pay with Visa?", "expected": ["payments#0"] },
-  { "id": "dan-09", "author": "dan", "question": "Do you do service on weekends?", "expected": ["store-and-appointments#0", "store-and-appointments#1"] },
-  { "id": "dan-10", "author": "dan", "question": "Do you take appointments on Sundays?", "expected": ["store-and-appointments#0", "store-and-appointments#1"] },
-
-  { "id": "c-01", "author": "claude", "question": "how long until my order shows up?", "expected": ["shipping#1"] },
-  { "id": "c-02", "author": "claude", "question": "do I pay anything for delivery if I spend 50 dollars?", "expected": ["shipping#2"] },
-  { "id": "c-03", "author": "claude", "question": "how fast is the express option and what does it cost?", "expected": ["shipping#1", "shipping#2"] },
-  { "id": "c-04", "author": "claude", "question": "where can I follow my package?", "expected": ["shipping#3"] },
-  { "id": "c-05", "author": "claude", "question": "my money still hasn't come back to my card, how long does it take?", "expected": ["returns#2"] },
-  { "id": "c-06", "author": "claude", "question": "I ran in the shoes twice and they hurt, can I swap them?", "expected": ["returns#0"] },
-  { "id": "c-07", "author": "claude", "question": "how do I send something back?", "expected": ["returns#1"] },
-  { "id": "c-08", "author": "claude", "question": "is sending an item back free?", "expected": ["returns#1"] },
-  { "id": "c-09", "author": "claude", "question": "I'm between a 42 and a 43, which one should I order?", "expected": ["sizing#0"] },
-  { "id": "c-10", "author": "claude", "question": "do the compression leggings run small?", "expected": ["sizing#1"] },
-  { "id": "c-11", "author": "claude", "question": "what size system do your sneakers use?", "expected": ["sizing#0"] },
-  { "id": "c-12", "author": "claude", "question": "can I split the payment into installments?", "expected": ["payments#0"] },
-  { "id": "c-13", "author": "claude", "question": "do you take Apple Pay?", "expected": ["payments#0"] },
-  { "id": "c-14", "author": "claude", "question": "should I send you my card number here?", "expected": ["payments#0"] },
-  { "id": "c-15", "author": "claude", "question": "what time do you close on Saturday?", "expected": ["store-and-appointments#0"] },
-  { "id": "c-16", "author": "claude", "question": "are you open on a public holiday?", "expected": ["store-and-appointments#0"] },
-  { "id": "c-17", "author": "claude", "question": "how much is the running analysis?", "expected": ["store-and-appointments#1"] },
-  { "id": "c-18", "author": "claude", "question": "can I cancel my fitting the day before?", "expected": ["store-and-appointments#1"] },
-  { "id": "c-19", "author": "claude", "question": "what's the latest slot I can book on a weekday?", "expected": ["store-and-appointments#1"] },
-  { "id": "c-20", "author": "claude", "question": "do you price match other stores?", "expected": [] }
+  {
+    "id": "dan-01",
+    "author": "dan",
+    "question": "Is Maryland available for shipping?",
+    "expected": []
+  },
+  {
+    "id": "dan-02",
+    "author": "dan",
+    "question": "Is the shipping measured in days or weeks?",
+    "expected": [
+      "shipping#1"
+    ]
+  },
+  {
+    "id": "dan-03",
+    "author": "dan",
+    "question": "Can I return one item after I bought it?",
+    "expected": [
+      "returns#0",
+      "returns#1"
+    ],
+    "note": "Labels widened on 11-nov after review: \"Return window\" says whether you can, \"How to return\" says how; both answer part of the question."
+  },
+  {
+    "id": "dan-04",
+    "author": "dan",
+    "question": "What if there is nothing wrong with the item and I just want to return it?",
+    "expected": [
+      "returns#0",
+      "returns#1"
+    ],
+    "note": "Labels widened on 11-nov after review: \"Return window\" says whether you can, \"How to return\" says how; both answer part of the question."
+  },
+  {
+    "id": "dan-05",
+    "author": "dan",
+    "question": "Do you have XXL size in these shoes, or in any shoes?",
+    "expected": [
+      "sizing#0"
+    ]
+  },
+  {
+    "id": "dan-06",
+    "author": "dan",
+    "question": "Do you have XXL, XL or XS in shirts?",
+    "expected": [
+      "sizing#1"
+    ]
+  },
+  {
+    "id": "dan-07",
+    "author": "dan",
+    "question": "Can I pay with crypto?",
+    "expected": [
+      "payments#0"
+    ]
+  },
+  {
+    "id": "dan-08",
+    "author": "dan",
+    "question": "Can I pay with Visa?",
+    "expected": [
+      "payments#0"
+    ]
+  },
+  {
+    "id": "dan-09",
+    "author": "dan",
+    "question": "Do you do service on weekends?",
+    "expected": [
+      "store-and-appointments#0",
+      "store-and-appointments#1"
+    ]
+  },
+  {
+    "id": "dan-10",
+    "author": "dan",
+    "question": "Do you take appointments on Sundays?",
+    "expected": [
+      "store-and-appointments#0",
+      "store-and-appointments#1"
+    ]
+  },
+  {
+    "id": "c-01",
+    "author": "claude",
+    "question": "how long until my order shows up?",
+    "expected": [
+      "shipping#1"
+    ]
+  },
+  {
+    "id": "c-02",
+    "author": "claude",
+    "question": "do I pay anything for delivery if I spend 50 dollars?",
+    "expected": [
+      "shipping#2"
+    ]
+  },
+  {
+    "id": "c-03",
+    "author": "claude",
+    "question": "how fast is the express option and what does it cost?",
+    "expected": [
+      "shipping#1",
+      "shipping#2"
+    ]
+  },
+  {
+    "id": "c-04",
+    "author": "claude",
+    "question": "where can I follow my package?",
+    "expected": [
+      "shipping#3"
+    ]
+  },
+  {
+    "id": "c-05",
+    "author": "claude",
+    "question": "my money still hasn't come back to my card, how long does it take?",
+    "expected": [
+      "returns#2"
+    ]
+  },
+  {
+    "id": "c-06",
+    "author": "claude",
+    "question": "I ran in the shoes twice and they hurt, can I swap them?",
+    "expected": [
+      "returns#0"
+    ]
+  },
+  {
+    "id": "c-07",
+    "author": "claude",
+    "question": "how do I send something back?",
+    "expected": [
+      "returns#1"
+    ]
+  },
+  {
+    "id": "c-08",
+    "author": "claude",
+    "question": "is sending an item back free?",
+    "expected": [
+      "returns#1"
+    ]
+  },
+  {
+    "id": "c-09",
+    "author": "claude",
+    "question": "I'm between a 42 and a 43, which one should I order?",
+    "expected": [
+      "sizing#0"
+    ]
+  },
+  {
+    "id": "c-10",
+    "author": "claude",
+    "question": "do the compression leggings run small?",
+    "expected": [
+      "sizing#1"
+    ]
+  },
+  {
+    "id": "c-11",
+    "author": "claude",
+    "question": "what size system do your sneakers use?",
+    "expected": [
+      "sizing#0"
+    ]
+  },
+  {
+    "id": "c-12",
+    "author": "claude",
+    "question": "can I split the payment into installments?",
+    "expected": [
+      "payments#0"
+    ]
+  },
+  {
+    "id": "c-13",
+    "author": "claude",
+    "question": "do you take Apple Pay?",
+    "expected": [
+      "payments#0"
+    ]
+  },
+  {
+    "id": "c-14",
+    "author": "claude",
+    "question": "should I send you my card number here?",
+    "expected": [
+      "payments#0"
+    ]
+  },
+  {
+    "id": "c-15",
+    "author": "claude",
+    "question": "what time do you close on Saturday?",
+    "expected": [
+      "store-and-appointments#0"
+    ]
+  },
+  {
+    "id": "c-16",
+    "author": "claude",
+    "question": "are you open on a public holiday?",
+    "expected": [
+      "store-and-appointments#0"
+    ]
+  },
+  {
+    "id": "c-17",
+    "author": "claude",
+    "question": "how much is the running analysis?",
+    "expected": [
+      "store-and-appointments#1"
+    ]
+  },
+  {
+    "id": "c-18",
+    "author": "claude",
+    "question": "can I cancel my fitting the day before?",
+    "expected": [
+      "store-and-appointments#1"
+    ]
+  },
+  {
+    "id": "c-19",
+    "author": "claude",
+    "question": "what's the latest slot I can book on a weekday?",
+    "expected": [
+      "store-and-appointments#1"
+    ]
+  },
+  {
+    "id": "c-20",
+    "author": "claude",
+    "question": "do you price match other stores?",
+    "expected": []
+  }
 ]
