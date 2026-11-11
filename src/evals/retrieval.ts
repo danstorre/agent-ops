@@ -14,6 +14,7 @@ export interface RetrievalRow {
   question: string;
   expected: string[];
   got: string[];
+  gotDistances: number[];
   rank: number | null; // 1-based position of the first acceptable chunk, null if not in the top k
   topDistance: number;
 }
@@ -32,7 +33,7 @@ export async function evaluateRetrieval(search: Search, cases: RetrievalCase[], 
     const results = await search(c.question, k);
     const got = results.map((r) => `${r.doc}#${r.index}`);
     const position = got.findIndex((tag) => c.expected.includes(tag));
-    rows.push({ id: c.id, question: c.question, expected: c.expected, got, rank: position === -1 ? null : position + 1, topDistance: results[0]?.distance ?? NaN });
+    rows.push({ id: c.id, question: c.question, expected: c.expected, got, gotDistances: results.map((r) => r.distance), rank: position === -1 ? null : position + 1, topDistance: results[0]?.distance ?? NaN });
   }
   return rows;
 }

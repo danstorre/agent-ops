@@ -10,6 +10,7 @@ import { storeTools } from "../src/agent/store-agent.js";
 import { buildPolicyStore } from "../src/tools/policies.js";
 import { grade, allowedPrices, type BehaviorCase, type CheckResult } from "../src/evals/behavior.js";
 import type { AgentResult } from "../src/agent/loop.js";
+import { esc, page } from "../src/evals/html.js";
 
 const MODEL = process.argv[2] ?? "gpt-4o";
 const allCases = JSON.parse(readFileSync(new URL("../evals/behavior-cases.json", import.meta.url), "utf8")) as BehaviorCase[];
@@ -93,4 +94,33 @@ writeFileSync(
     "",
   ].join("\n"),
 );
+const transcript = (messages: Saved["messages"]) => {
+  if (!messages) return `<p class="meta">Transcript not recorded for this run.</p>`;
+  const steps: string[] = [];
+  for (const m of messages as Array<{ role: string; content: string | Array<Record<string, unknown>> }>) {
+    if (typeof m.content === "string") { steps.push(`<div class="step"><div class="who">${m.role === "user" ? "CUSTOMER" : "AGENT"}</div>${esc(m.content)}</div>`); continue; }
+    for (const b of m.content) {
+      if (b.type === "text" && b.text) steps.push(`<div class="step"><div class="who">AGENT</div>${esc(b.text as string)}</div>`);
+      if (b.type === "tool_use") steps.push(`<div class="step"><div class="who">MODEL CALLS ${esc(b.name as string)}</div><pre>${esc(JSON.stringify(b.input, null, 2))}</pre></div>`);
+      if (b.type === "tool_result") steps.push(`<div class="step"><div class="who">TOOL RETURNS${b.is_error ? " (ERROR)" : ""}</div><pre>${esc(String(b.content))}</pre></div>`);
+    }
+  }
+  return steps.join("");
+};
+const htmlCards = rows.map((r) => {
+  const badges = r.checks.filter((k) => k.applies).map((k) => `<span class="badge ${k.passed ? "ok" : "bad"}" title="${esc(k.detail)}">${k.passed ? "✓" : "✗"} ${k.name}</span>`).join("");
+  const failed = r.checks.filter((k) => k.applies && !k.passed);
+  return `<div class="card"><div class="q">${esc(r.c.message)}</div>
+<div class="meta">${esc(r.c.id)} · expected: ${r.c.expect.handoff ? "hand off to a person" : `answer${r.c.expect.toolsAnyOf ? ` using ${r.c.expect.toolsAnyOf.join(" or ")}` : ""}`} · tools called: ${esc(r.tools.join(", ") || "none")}</div>
+<div style="margin-top:6px">${badges}</div>
+${failed.length ? `<p class="meta">${failed.map((k) => `${esc(k.name)}: ${esc(k.detail)}`).join(" · ")}</p>` : ""}
+<p><b>Reply:</b> ${esc(r.s.reply)}</p>
+<details><summary>Transcript step by step</summary>${transcript(r.s.messages)}</details></div>`;
+}).join("\n");
+const stat = (label: string, n: number, d: number) => `<div class="stat"><b>${n}/${d}</b><span>${esc(label)}</span></div>`;
+writeFileSync(new URL(`../evals/reports/behavior-${MODEL}.html`, import.meta.url), page(`Behavior eval: ${MODEL}`, `<h1>Behavior eval: ${esc(MODEL)}</h1>
+<p class="lead">${rows.length} of ${allCases.length} conversations, one run each. Each conversation is checked for the right tool, a correct handoff, citations and invented prices. Estimated cost USD ${cost.toFixed(4)}.</p>
+<div class="stats">${summary.map((x) => stat(x.name, x.passed, x.total)).join("")}${stat("all checks in a conversation", allPassed, rows.length)}</div>
+<h2>Per conversation</h2>${htmlCards}`));
+
 console.log(`${rows.length}/${cases.length} conversations${stoppedBy ? `, stopped by ${stoppedBy}` : ""}\n${summary.map((x) => `${x.name}: ${pct(x.passed, x.total)}`).join("\n")}\nall checks: ${pct(allPassed, rows.length)}\ncost: USD ${cost.toFixed(3)}`);

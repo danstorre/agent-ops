@@ -61,6 +61,7 @@ npm test                                              # 40 tests, no API key nee
 npm run eval:retrieval                                # retrieval eval, writes docs/evals/retrieval.md
 npx tsx --env-file=.env scripts/eval-behavior.ts gpt-4.1-mini   # behavior eval, needs OPENAI_API_KEY
 npm run transcript -- dan-01                          # read one eval conversation step by step
+open evals/reports/*.html                             # both evals as readable pages, with transcripts
 npm run rag -- "can I return shoes I already ran in?" # see retrieval step by step
 npm run chat                                          # live chat, needs your own ANTHROPIC_API_KEY
 ```

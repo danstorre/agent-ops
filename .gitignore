@@ -4,3 +4,4 @@ dist/
 .scratch/
 CLAUDE.local.md
 evals/runs/
+evals/reports/

@@ -6,6 +6,8 @@ import { localEmbedder } from "../src/rag/embed.js";
 import { keywordEmbedder } from "../src/rag/keyword-embedder.js";
 import { buildPolicyStore } from "../src/tools/policies.js";
 import { evaluateRetrieval, summarize, type RetrievalCase, type RetrievalRow } from "../src/evals/retrieval.js";
+import { esc, page } from "../src/evals/html.js";
+import { loadPolicyChunks } from "../src/tools/policies.js";
 
 const GATE_HIT_AT_3 = Number(process.env.GATE_HIT_AT_3 ?? 0);
 const cases = JSON.parse(readFileSync(new URL("../evals/retrieval-cases.json", import.meta.url), "utf8")) as RetrievalCase[];
@@ -45,6 +47,26 @@ const report = [
   "",
 ].join("\n");
 writeFileSync(new URL("../docs/evals/retrieval.md", import.meta.url), report);
+
+const heading = new Map(loadPolicyChunks().map((c) => [`${c.doc}#${c.index}`, `${c.doc} · ${c.heading}`]));
+const badge = (row: RetrievalRow) =>
+  row.expected.length === 0 ? `<span class="badge na">no answer in the policies</span>`
+  : row.rank === 1 ? `<span class="badge ok">right section first</span>`
+  : row.rank ? `<span class="badge warn">right section #${row.rank}</span>`
+  : `<span class="badge bad">missed</span>`;
+const htmlCards = model.rows.map((row, i) => {
+  const base = baseline.rows[i]!;
+  const items = row.got.map((tag, k) => `<li class="${row.expected.includes(tag) ? "hit" : ""}">${esc(heading.get(tag) ?? tag)} <span class="meta">[${esc(tag)}] · distance ${row.gotDistances[k]!.toFixed(2)}</span></li>`).join("");
+  return `<div class="card"><div class="q">${esc(row.question)}</div>
+<div class="meta">${esc(row.id)} · correct: ${row.expected.length ? row.expected.map((t) => esc(heading.get(t) ?? t)).join(" or ") : "none"}</div>
+<div style="margin-top:6px">${badge(row)} <span class="meta">keyword baseline: ${base.expected.length === 0 ? "n/a" : base.rank ? `#${base.rank}` : "missed"}</span></div>
+<ol>${items}</ol></div>`;
+}).join("\n");
+const stat = (label: string, n: number, d: number) => `<div class="stat"><b>${n}/${d}</b><span>${label} · ${Math.round((100 * n) / d)}%</span></div>`;
+writeFileSync(new URL("../evals/reports/retrieval.html", import.meta.url), page("Retrieval eval", `<h1>Retrieval eval</h1>
+<p class="lead">${cases.length} customer questions. For each one, the 3 policy sections the search returned, in order; the correct one in bold.</p>
+<div class="stats">${stat("Model: right section first", model.summary.hitAt1, model.summary.answerable)}${stat("Model: right section in top 3", model.summary.hitAt3, model.summary.answerable)}${stat("Keyword baseline: first", baseline.summary.hitAt1, baseline.summary.answerable)}${stat("Keyword baseline: top 3", baseline.summary.hitAt3, baseline.summary.answerable)}</div>
+<h2>Per question</h2>${htmlCards}`));
 
 console.log(`model    hit@1 ${pct(model.summary.hitAt1, model.summary.answerable)}  hit@3 ${pct(model.summary.hitAt3, model.summary.answerable)}`);
 console.log(`baseline hit@1 ${pct(baseline.summary.hitAt1, baseline.summary.answerable)}  hit@3 ${pct(baseline.summary.hitAt3, baseline.summary.answerable)}`);
