@@ -1,0 +1,6 @@
+[mcp_servers.northside-store]
+command = "npx"
+args = [
+    "tsx",
+    "src/mcp/main.ts",
+]
